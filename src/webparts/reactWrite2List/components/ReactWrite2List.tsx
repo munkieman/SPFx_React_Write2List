@@ -34,7 +34,7 @@ export default class ReactWrite2List extends React.Component<IReactWrite2ListPro
   }
 
   private async _gettags() {
-    const item: any = await sp.web.lists.getByTitle("Test_Metadata").items.getById(1).get();
+    const item: any = await sp.web.lists.getByTitle("WPI_TopSection").items.getById(1).get();
     let selectedtags: any = [];
     item.Tags.forEach(function (v: any[], i) {
       selectedtags.push({ key: v["TermGuid"], name: v["Label"] })
@@ -55,11 +55,17 @@ export default class ReactWrite2List extends React.Component<IReactWrite2ListPro
       'TermGuid': terms[0].key,
       'WssId': '-1'
     };
-    alert('data written ' + terms[0].key);
+    
+    const item: any = await sp.web.lists.getByTitle("WPI_TopSection").items.getById(1).get();
+    alert("title="+item.Title)
     //termLabel=terms[0].name;
-
-    return await sp.web.lists.getByTitle("Test_Metadata").items.getById(4).update({Title: terms[0].name});
-    //return (await sp.web.lists.getByTitle("Test_Metadata").items.add({Title: termLabel}))
+    if(item.Title == ""){
+      alert('data written ' + terms[0].key);
+      return (await sp.web.lists.getByTitle("WPI_TopSection").items.add({Title: terms[0].name}))
+    } else {
+      alert('data updated ' + terms[0].key);
+      return await sp.web.lists.getByTitle("WPI_TopSection").items.getById(1).update({Title: terms[0].name});
+    }
   }  
 
   public render(): React.ReactElement<IReactWrite2ListProps> {
